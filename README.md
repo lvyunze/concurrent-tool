@@ -1,30 +1,32 @@
-> pip install keyword_extract_links
+> pip install concurrent-tool
 
-> httpx,fake_useragent must be installed to test before use,but the keyword_extract_Links library is not dependent
+> Concurrent libraries for easy use of thread pools, process pools, and coroutines
 
+> pip install requests
 ```
-from keyword_extract_links import extract_links
-import httpx
-from fake_useragent import UserAgent
-ua = UserAgent()
+import requests
+from tool import Multithreading, Multiprocess, Coroutines
+
+def get_info(url):
+    data = requests.get(url)
+    print(data.status_code)
+    return data
+
+# use multithreading
+
+request_list = [
+                "http://icanhazip.com",
+                "https://github.com/OmkarPathak/pygorithm",
+                "https://www.cnblogs.com/lipijin/p/3862684.html"
+               ]
+multithreading = Multithreading(get_info, request_list, 2)
+multithreading.multithreading()
+
+# use multiprocess
+multiprocess = Multiprocess(get_info, request_list, 3)
+multiprocess.multiprocess()
 
 
-def get_html(url_address):
-    headers = {'user-agent': ua.random}
-    r = httpx.get(url_address, headers=headers)
-    return r.text
-
-
-url_list = [
-              "https://tieba.baidu.com/f/search/res?ie=utf-8&qw=%E6%98%93%E6%AC%A1%E5%85%83",
-              "https://s.weibo.com/weibo?q=%E6%98%93%E6%AC%A1%E5%85%83&Refer=STopic_history"
-           ]
-for url in url_list:
-    html = get_html(url)
-    extract = extract_links.Extract(url, html, "易次元")
-    url_list = extract.get_url_list()
-    print(url_list)
-
-# ['https://tieba.baidu.com/home/main?un=%E6%98%93%E6%AC%A1%E5%85%83&from=tieba']
-# ['https://weibo.com/6509857538?refer_flag=1001030103_', 'https://app.weibo.com/t/feed/2nxWC7', 'https://k.sina.cn/article_5790946818_1592ad6020010112vs.html?from=animation&wm=3049_0032', 'https://c.m.163.com/news/a/EQ35KNJQ00318PFH.html?spss=newsapp']
+# use coroutines
+Coroutines([get_info(url) for url in request_list])
 ```
