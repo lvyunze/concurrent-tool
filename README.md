@@ -2,7 +2,7 @@
 
 > Concurrent libraries for easy use of thread pools, process pools, and coroutines
 
-> pip install requests
+> requests must be installed to test before use,but the concurrent-tool library is not dependent
 ```
 import requests
 from tool import Multithreading, Multiprocess, Coroutines
